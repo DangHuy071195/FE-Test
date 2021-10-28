@@ -1,24 +1,23 @@
 import {useReducer, useCallback} from 'react'
-
 const formReducer = (state, action) => {
   switch (action.type) {
     case 'INPUT_CHANGE': {
       let formIsValid = true
-
       for (const inputId in state.inputs) {
         if (inputId === action.inputId) {
           formIsValid = formIsValid && action.isValid
+          if (action.inputId === 'checkbox') {
+            formIsValid = formIsValid && action.isChecked
+          }
         } else {
           formIsValid = formIsValid && state.inputs[inputId].isValid
         }
       }
       return {
         ...state,
-
         inputs: {
           ...state.inputs,
           [action.inputId]: {value: action.value, isValid: action.isValid},
-          checkeds: action.checkedState,
         },
         isValid: formIsValid,
       }
@@ -34,13 +33,13 @@ const useForm = (initialInputs, initialFormValidity) => {
     isValid: initialFormValidity,
   })
 
-  const inputHandler = useCallback((id, value, isValid, checkedState) => {
+  const inputHandler = useCallback((id, value, isValid, isChecked) => {
     dispatch({
       type: 'INPUT_CHANGE',
       value: value,
       isValid: isValid,
       inputId: id,
-      checkedState: checkedState,
+      isChecked: isChecked,
     })
   }, [])
 

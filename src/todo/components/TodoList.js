@@ -30,9 +30,6 @@ const StlNewTodo = styled.div`
       font-size: calc(1.6rem + 0.5vw);
     }
   }
-  button {
-    /* margin-top: 4rem; */
-  }
 `
 
 const StlAction = styled.div`
@@ -74,18 +71,23 @@ const TodoList = () => {
   }, [todosCtx.items.length])
   const [formState, inputHandler] = useForm(
     {
-      checkeds: [],
+      chk: {
+        value: '',
+        isValid: false,
+      },
     },
     false
   )
-  console.log(formState.inputs.checkeds)
+  console.log(formState.inputs)
 
   const clickDetailsHandler = (id) => {
     console.log(id)
     const updatedShowedDetails = showedDetails.map((item, index) =>
       index === id ? !item : item
     )
+
     setShowedDetails(updatedShowedDetails)
+    console.log(showedDetails)
   }
 
   return (
@@ -108,17 +110,17 @@ const TodoList = () => {
             return dueDateA > dueDateB ? -1 : 1
           })
           .map(({id, title, ...otherTodoProps}, index) => (
-            <div key={index}>
+            <div>
               <StlAction>
                 <div className='todo-title'>
                   <Input
-                    id={`chk-${index}`}
+                    id='chk'
                     element='input'
                     type='checkbox'
                     style={{marginRight: '1rem'}}
-                    index={index}
                     onInput={inputHandler}
                     validators={[VALIDATOR_REQUIRE()]}
+                    initialValid={formState.inputs.chk.isValid}
                   />
                   <span>{title}</span>
                 </div>
@@ -139,6 +141,7 @@ const TodoList = () => {
               </StlAction>
               {showedDetails[index] && (
                 <TodoItem
+                  key={id}
                   id={id}
                   title={title}
                   {...otherTodoProps}
@@ -148,7 +151,7 @@ const TodoList = () => {
             </div>
           ))}
       </StlNewTodo>
-      {formState.inputs.checkeds.includes(true) && (
+      {formState.inputs.chk.isValid && (
         <StlyBulkAction>
           <div className='todo-title'>
             <span>Bulk Action</span>
