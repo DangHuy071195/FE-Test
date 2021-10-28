@@ -31,7 +31,7 @@ const StlNewTodo = styled.div`
     }
   }
   button {
-    margin-top: 4rem;
+    /* margin-top: 4rem; */
   }
 `
 
