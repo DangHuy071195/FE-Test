@@ -5,7 +5,7 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path='/task/new' exact component={Todo} />
+        <Route path='/' exact component={Todo} />
       </Switch>
     </Router>
   )
